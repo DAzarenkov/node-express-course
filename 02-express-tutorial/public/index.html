@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Introduction to Express</h1>
+
+    <button id="get_products">Get products</button>
+
+    <div id="products"></div>
+
+    <script>
+      (() => {
+        document
+          .getElementById("get_products")
+          .addEventListener("click", async () => {
+            const response = await fetch("/api/v1/products");
+            const products = await response.json();
+
+            console.log(products);
+
+            const productList = products
+              .map((p) => {
+                return `<h2>${p.name} - $${p.price} </h2><p>${p.desc}</p>`;
+              })
+              .join("");
+
+            document.getElementById("products").innerHTML = productList;
+          });
+      })();
+    </script>
+  </body>
+</html>
