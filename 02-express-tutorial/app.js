@@ -1,12 +1,41 @@
 const express = require("express");
 const { products } = require("./data");
+const { people } = require("./data");
+const peopleRouter = require("./routes/people");
 
 console.log("Express Tutorial");
 
 const app = express();
 const port = 3000;
 
-app.use(express.static("./public"));
+app.use(express.static("./methods-public"));
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
+function logger(req, res, next) {
+  console.log("Method: ", req.method);
+  console.log("URL: ", req.url);
+  console.log("Current time: ", new Date().toLocaleString());
+
+  next();
+}
+app.use(logger);
+
+app.use("/api/v1/people", peopleRouter);
+
+// app.get("/api/v1/people", (req, res) => {
+//   res.json(people);
+// });
+
+// app.post("/api/v1/people", (req, res) => {
+//   const { name } = req.body;
+//   if (!name) {
+//     res.status(400).json({ success: false, message: "Please provide a name" });
+//   }
+//   people.push({ id: people.length + 1, name });
+
+//   res.status(201).json({ success: true, name });
+// });
 
 app.get("/api/v1/test", (req, res) => {
   res.json({ message: "It worked!" });
