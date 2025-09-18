@@ -1,13 +1,12 @@
 const jwt = require("jsonwebtoken");
+const { BadRequestError, InternalServerError } = require("../errors");
 
 // POST for /api/v1/logon
 const logon = (req, res) => {
   const { name, password } = req.body;
 
   if (!name || !password) {
-    return res
-      .status(400)
-      .json({ message: "Please provide name and password" });
+    throw new BadRequestError("Please provide name and password");
   }
 
   try {
@@ -17,7 +16,8 @@ const logon = (req, res) => {
 
     res.status(200).json({ token });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    console.log(error);
+    throw new InternalServerError("Something went wrong");
   }
 };
 
