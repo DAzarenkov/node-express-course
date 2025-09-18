@@ -1,10 +1,11 @@
 const jwt = require("jsonwebtoken");
+const { UnauthenticatedError } = require("../errors");
 
 const authMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "unauthorized" });
+    throw new UnauthenticatedError();
   }
 
   const token = authHeader.split(" ")[1];
@@ -15,7 +16,8 @@ const authMiddleware = (req, res, next) => {
 
     next();
   } catch (error) {
-    return res.status(401).json({ message: "unauthorized" });
+    console.log(error);
+    throw new UnauthenticatedError();
   }
 };
 
