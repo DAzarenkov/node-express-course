@@ -11,7 +11,9 @@ const logon = (req, res) => {
   }
 
   try {
-    const token = jwt.sign({ name }, process.env.JWT_SECRET);
+    const token = jwt.sign({ name }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_LIFETIME || "24h",
+    });
 
     res.status(200).json({ token });
   } catch (error) {
